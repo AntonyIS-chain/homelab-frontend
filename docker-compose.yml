@@ -1,0 +1,12 @@
+services:
+
+ homelab-frontend:
+
+    build: .
+
+    container_name: homelab-frontend
+
+    restart: unless-stopped
+
+    ports:
+      - "3000:3000"
