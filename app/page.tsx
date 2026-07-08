@@ -5,7 +5,7 @@ export default function Home() {
         <h1 className="text-5xl font-bold">
           🚀 Home Lab Deployment Successful
         </h1>
-
+        <h1>Version 2 🚀</h1>
         <p className="mt-5">
           Deployed automatically from GitHub Actions.
         </p>
