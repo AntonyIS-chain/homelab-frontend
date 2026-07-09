@@ -1,4 +1,4 @@
-name: Deploy Home Lab
+name: Deploy
 
 on:
   push:
@@ -6,28 +6,20 @@ on:
       - main
 
 jobs:
-
   deploy:
-
     runs-on: ubuntu-latest
 
     steps:
-
       - uses: actions/checkout@v4
 
-      - name: Deploy
-
+      - name: Deploy to HP Server
         uses: appleboy/ssh-action@v1.2.0
-
         with:
-
           host: ${{ secrets.HOST }}
-
           username: ${{ secrets.USERNAME }}
-
           key: ${{ secrets.SSH_KEY }}
-
+          port: ${{ secrets.PORT }}
           script: |
-            cd /opt/apps/home-lab-demo
-            git pull
+            cd /Applications/homelab-frontend
+            git pull origin main
             docker compose up -d --build
