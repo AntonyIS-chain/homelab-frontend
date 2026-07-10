@@ -26,6 +26,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            cd /opt/apps/homelab-frontend
+            cd /Applications/homelab-frontend
             git pull origin main
             docker compose up -d --build
