@@ -1,7 +1,7 @@
 "use client";
 
 import "./globals.css";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const features = [
   {
@@ -237,12 +237,15 @@ const blogPosts = [
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [activeFaq, setActiveFaq] = useState(null);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [selectedPlan, setSelectedPlan] = useState(1);
 
   useEffect(() => {
-    setIsVisible(true);
+    // Use requestAnimationFrame to avoid cascading renders
+    requestAnimationFrame(() => {
+      setIsVisible(true);
+    });
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -255,9 +258,13 @@ export default function Home() {
       { threshold: 0.1 }
     );
 
-    document.querySelectorAll(".card-enter").forEach((el) => observer.observe(el));
+    const elements = document.querySelectorAll(".card-enter");
+    elements.forEach((el) => observer.observe(el));
 
-    return () => observer.disconnect();
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+      observer.disconnect();
+    };
   }, []);
 
   return (
@@ -731,9 +738,9 @@ export default function Home() {
       <section id="how-it-works" className="relative px-6 py-24 bg-gradient-to-b from-white to-emerald-50/20">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
-              {/* <span className="text-sm font-medium text-emerald-700">🚀 How it works</span> */}
-            </div>
+            {/* <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
+              <span className="text-sm font-medium text-emerald-700">🚀 How it works</span>
+            </div> */}
 
             <h2 className={`mt-6 text-4xl sm:text-5xl font-black tracking-tight text-slate-900 transition-all duration-700 delay-100 card-enter ${isVisible ? 'visible' : ''}`}>
               Go live with
@@ -750,7 +757,8 @@ export default function Home() {
             
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
               {steps.map((step, index) => (
-                <div                  key={step.number}
+                <div
+                  key={step.number}
                   className={`group relative card-enter ${isVisible ? 'visible' : ''}`}
                   style={{ transitionDelay: `${index * 150 + 300}ms` }}
                 >
@@ -821,9 +829,9 @@ export default function Home() {
       <section id="integrations" className="relative px-6 py-24">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
-              {/* <span className="text-sm font-medium text-emerald-700">🔌 Integrations</span> */}
-            </div>
+            {/* <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
+              <span className="text-sm font-medium text-emerald-700">🔌 Integrations</span>
+            </div> */}
 
             <h2 className={`mt-6 text-4xl sm:text-5xl font-black tracking-tight text-slate-900 transition-all duration-700 delay-100 card-enter ${isVisible ? 'visible' : ''}`}>
               Connect to everything
@@ -874,9 +882,9 @@ export default function Home() {
       <section className="relative px-6 py-24 bg-gradient-to-b from-emerald-50/20 to-white">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
-              {/* <span className="text-sm font-medium text-emerald-700">💬 Testimonials</span> */}
-            </div>
+            {/* <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
+              <span className="text-sm font-medium text-emerald-700">💬 Testimonials</span>
+            </div> */}
 
             <h2 className={`mt-6 text-4xl sm:text-5xl font-black tracking-tight text-slate-900 transition-all duration-700 delay-100 card-enter ${isVisible ? 'visible' : ''}`}>
               Trusted by
@@ -900,7 +908,7 @@ export default function Home() {
                     <p className="text-xs text-slate-500">{testimonial.role}</p>
                   </div>
                 </div>
-                <p className="text-slate-600 leading-relaxed">"{testimonial.quote}"</p>
+                <p className="text-slate-600 leading-relaxed">&quot;{testimonial.quote}&quot;</p>
                 <div className="mt-4 flex text-emerald-400">
                   {[...Array(5)].map((_, i) => (
                     <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
@@ -990,9 +998,9 @@ export default function Home() {
       <section className="relative px-6 py-24 bg-gradient-to-b from-white to-emerald-50/20">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
-              {/* <span className="text-sm font-medium text-emerald-700">⚡ The Dipple Difference</span> */}
-            </div>
+            {/* <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
+              <span className="text-sm font-medium text-emerald-700">⚡ The Dipple Difference</span>
+            </div> */}
 
             <h2 className={`mt-6 text-4xl sm:text-5xl font-black tracking-tight text-slate-900 transition-all duration-700 delay-100 card-enter ${isVisible ? 'visible' : ''}`}>
               Your superpower for
@@ -1285,9 +1293,9 @@ export default function Home() {
       <section id="faq" className="relative px-6 py-24">
         <div className="mx-auto max-w-4xl">
           <div className="text-center">
-            <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
-              {/* <span className="text-sm font-medium text-emerald-700">❓ FAQ</span> */}
-            </div>
+            {/* <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
+              <span className="text-sm font-medium text-emerald-700">❓ FAQ</span>
+            </div> */}
 
             <h2 className={`mt-6 text-4xl sm:text-5xl font-black tracking-tight text-slate-900 transition-all duration-700 delay-100 card-enter ${isVisible ? 'visible' : ''}`}>
               Frequently asked
@@ -1326,9 +1334,9 @@ export default function Home() {
       <section className="relative px-6 py-24 bg-gradient-to-b from-emerald-50/20 to-white">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
+            {/* <div className={`inline-flex items-center gap-2 rounded-full glass-white px-4 py-1.5 transition-all duration-700 card-enter ${isVisible ? 'visible' : ''}`}>
               <span className="text-sm font-medium text-emerald-700">📚 Resources</span>
-            </div>
+            </div> */}
 
             <h2 className={`mt-6 text-4xl sm:text-5xl font-black tracking-tight text-slate-900 transition-all duration-700 delay-100 card-enter ${isVisible ? 'visible' : ''}`}>
               Insights from
