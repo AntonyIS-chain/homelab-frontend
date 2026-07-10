@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
       - name: Connect to Tailscale
         uses: tailscale/github-action@v3
         with:
@@ -26,6 +23,12 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            cd /Applications/homelab-frontend
+            set -e
+
+            cd /home/antony/Applications/homelab-frontend
+
             git pull origin main
+
             docker compose up -d --build
+
+            docker compose ps
